@@ -377,6 +377,7 @@ class PlatonicSolidPanel:
         f.vertexpolygon.setChecked(obj.VertexPolygon)
         f.cloud.setChecked(obj.Cloud)
         f.solidobject.setChecked(obj.SolidObject)
+        f.edgeradius.setValue(obj.EdgeRadius)
         
     def accept(self):
         print("Accepting")
@@ -389,6 +390,7 @@ class PlatonicSolidPanel:
         vertexpolygon = f.vertexpolygon.isChecked()
         cloud = f.cloud.isChecked()
         solidobject = f.solidobject.isChecked()
+        edgeradius = f.edgeradius.value()
 
         #for i in dir(f.solid):
         #    print("{0} -> [{1}]".format(i, getattr(f.solid,i)))
@@ -403,6 +405,7 @@ class PlatonicSolidPanel:
         self.platonic.VertexPolygon = vertexpolygon
         self.platonic.Cloud = cloud
         self.platonic.ActiveMeasure = measure
+        self.platonic.EdgeRadius = edgeradius
 
         
         if measure == "Outer radius":
