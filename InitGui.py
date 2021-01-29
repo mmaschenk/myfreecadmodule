@@ -34,8 +34,6 @@ class MyWorkbench ( Workbench ):
         self.appendToolbar(*DecoratedObjectsGui.toolbar)
         self.appendMenu(*DecoratedObjectsGui.toolbar)
 
-        #self.appendToolbar("My Tools", ["MyCommand1","MyCommand2"])
-        #self.appendMenu("My Tools", ["MyCommand1","MyCommand2"])
         Log ("Loading My Workbench... done\n")
 
     def Activated(self):
