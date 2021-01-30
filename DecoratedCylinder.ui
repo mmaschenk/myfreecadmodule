@@ -14,10 +14,27 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>Inner Radius</string>
+      <string>Thickness</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSpinBox" name="segments">
+     <property name="value">
+      <number>16</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QDoubleSpinBox" name="thickness">
+     <property name="suffix">
+      <string>mm</string>
+     </property>
+     <property name="value">
+      <double>2.000000000000000</double>
      </property>
     </widget>
    </item>
@@ -26,15 +43,28 @@
      <property name="suffix">
       <string>mm</string>
      </property>
+     <property name="decimals">
+      <number>2</number>
+     </property>
+     <property name="maximum">
+      <double>9999999</double>
+     </property>
      <property name="value">
       <double>10.000000000000000</double>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Reverse Direction</string>
+      <string>Segments</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QCheckBox" name="reverse">
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </item>
@@ -42,13 +72,6 @@
     <widget class="QLabel" name="label_2">
      <property name="text">
       <string>Height</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Segments</string>
      </property>
     </widget>
    </item>
@@ -62,34 +85,31 @@
      </property>
     </widget>
    </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Reverse Direction</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Radius</string>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="1">
-    <widget class="QSpinBox" name="segments">
+    <widget class="QSpinBox" name="stripes">
      <property name="value">
-      <number>16</number>
+      <number>2</number>
      </property>
     </widget>
    </item>
-   <item row="4" column="1">
-    <widget class="QCheckBox" name="reverse">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_6">
      <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Outer Radius</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QDoubleSpinBox" name="radius2">
-     <property name="suffix">
-      <string>mm</string>
-     </property>
-     <property name="value">
-      <double>6.000000000000000</double>
+      <string>Stripes</string>
      </property>
     </widget>
    </item>
