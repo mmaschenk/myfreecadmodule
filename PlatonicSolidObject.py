@@ -68,7 +68,6 @@ platonic_solids = {
 }
 
 def dirobject(obj, fmt):
-
     for i in dir(obj):
         print(fmt.format(i, getattr(obj,i)))
 
@@ -185,13 +184,13 @@ class PlatonicSolid:
         #obj.Shape = rst
 
 
-        print("self = [{0}]. obj = [{1}]".format(self,obj))
+        #print("self = [{0}]. obj = [{1}]".format(self,obj))
 
         #dirobject(self, "Self[{0}] -> [{1}]")
         #dirobject(obj, "Obj[{0}] -> [{1}]")
         #rst = self.platonicsolid(obj)
         rst = self.cylinders(obj)
-        print("Got: [{0}]".format(rst))
+        #print("Got: [{0}]".format(rst))
         obj.Shape = rst
 
         #solidfacefusion = doc.addObject("Part::MultiFuse", f"{name}_solidfaces")
@@ -204,10 +203,10 @@ class PlatonicSolid:
 
         if obj.ActiveMeasure == "Outer radius":            
             factor = obj.OuterRadius / radius
-            print(f"Setting Outerradius: {obj.OuterRadius}")
+            #print(f"Setting Outerradius: {obj.OuterRadius}")
         elif obj.ActiveMeasure == "Edge length":
             factor = obj.EdgeLength / platonic_solid['edgelength']
-            print(f"Setting edgelength: {obj.EdgeLength}")
+            #print(f"Setting edgelength: {obj.EdgeLength}")
         else:
             print("Not setting any factor [{0}]".format(obj.ActiveMeasure))
             return
@@ -216,12 +215,12 @@ class PlatonicSolid:
     def cylinders(self, obj, outerradius=None, edgelength=None, edgeradius=None):
         platonic_solid = platonic_solids[obj.Solid]
         factor = self.determinefactor(obj)
-        print(f"Factor: {factor} ({outerradius}) ({edgelength})")
+        #print(f"Factor: {factor} ({outerradius}) ({edgelength})")
 
         edgeradius = obj.EdgeRadius
         if edgeradius is None:
             edgeradius = factor*platonic_solid['edgelength']/20
-            print(f"Edgeradius redetermined at {edgeradius}")
+            #print(f"Edgeradius redetermined at {edgeradius}")
 
         cylinderlist = cylindershapes(obj.Solid, factor=factor, radius=edgeradius)
         spheres = sphereshapes(obj.Solid, factor=factor, radius=edgeradius)
@@ -244,16 +243,16 @@ class PlatonicSolid:
 
         if obj.ActiveMeasure == "Outer radius":            
             factor = obj.OuterRadius / radius
-            print(f"Setting Outerradius: {obj.OuterRadius}")
+            #print(f"Setting Outerradius: {obj.OuterRadius}")
         elif obj.ActiveMeasure == "Edge length":
             factor = obj.EdgeLength / platonic_solid['edgelength']
-            print(f"Setting edgelength: {obj.EdgeLength}")
+            #print(f"Setting edgelength: {obj.EdgeLength}")
         else:
             print("Not setting any factor [{0}]".format(obj.ActiveMeasure))
             return
 
-        print(f"Factor: {factor} = {factor/platonic_solid['radius']} * R")
-        print(f"Solid Edge length: {platonic_solid['edgelength']}")
+        #print(f"Factor: {factor} = {factor/platonic_solid['radius']} * R")
+        #print(f"Solid Edge length: {platonic_solid['edgelength']}")
 
         if obj.VertexPolygon:
             p = Part.makePolygon( [ normalize(x, factor) for x in platonic_solid['vertices']])
@@ -324,7 +323,6 @@ class ViewProviderPlatonicSolid:
         return []
 
     def getIcon(self):
-        print("icon for {0}".format(self))
         return os.path.join(os.path.dirname(__file__),"simple-icosahedron.svg")
 
     def getDefaultDisplayModes(self):
@@ -364,7 +362,6 @@ class PlatonicSolidPanel:
 
     def populate(self, obj):
         f = self.form
-        print(obj.ActiveMeasure)
         if obj.ActiveMeasure == "Outer radius":
             f.radius.setValue(obj.OuterRadius)            
         elif obj.ActiveMeasure == "Edge length":
@@ -380,8 +377,6 @@ class PlatonicSolidPanel:
         f.edgeradius.setValue(obj.EdgeRadius)
         
     def accept(self):
-        print("Accepting")
-
         f = self.form
 
         solid = f.solid.currentText()
@@ -395,7 +390,7 @@ class PlatonicSolidPanel:
         #for i in dir(f.solid):
         #    print("{0} -> [{1}]".format(i, getattr(f.solid,i)))
 
-        print("Solid: {0} [{1}]".format(f.solid.currentText(), f.solid.currentIndex()))
+        #print("Solid: {0} [{1}]".format(f.solid.currentText(), f.solid.currentIndex()))
 
         if not self.platonic:
             self.platonic = createPlatonicSolid()
