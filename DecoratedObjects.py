@@ -174,7 +174,7 @@ class ViewProviderDecoratedCylinder:
     def __getstate__(self):
         return None
 
-    def __setstate__(self):
+    def __setstate__(self, state):
         return None
 
 class DecoratedCylinderPanel:
@@ -201,8 +201,8 @@ class DecoratedCylinderPanel:
         FreeCADGui.Control.closeDialog()
 
 
-
+"""
 print(uifile)
-
 panel = DecoratedCylinderPanel()
 FreeCADGui.Control.showDialog(panel)
+"""
