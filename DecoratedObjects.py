@@ -8,12 +8,29 @@ path = os.path.dirname(__file__)
 
 uifile = os.path.join(path,"DecoratedCylinder.ui")
 
+def show(obj):
+    stat = ""
+    for x in dir(obj):
+        stat = stat + "  {0} -> [{1}]".format(x, getattr(obj,x))
+
+    return ("DecoratedCylinder[" +
+            "Radius={0}".format(getattr(obj, "Radius", None)) +
+            ";Thickness={0}".format(getattr(obj, "Thickness", None)) +
+            ";Height={0}".format(getattr(obj, "Height", None)) +
+            ";Stripes={0}".format(getattr(obj, "Stripes", None)) +
+            ";Segments={0}".format(getattr(obj, "Segments", None)) +
+            ";Reversed={0}".format(getattr(obj, "Reversed", None)) +
+            ";Visibility={0}".format(getattr(obj, "Visibility", None)) +
+            "]")
+
+
 class DecoratedCylinder:
+
     def __init__(self, obj):
         obj.addProperty("App::PropertyLength", 
                         "Radius", 
                         "Dimensions",
-                        "Inner radius of the Cylinder").Radius=1.0
+                        "Inner radius of the Cylinder").Radius=2.0
         obj.addProperty("App::PropertyLength", 
                         "Thickness", 
                         "Dimensions",
@@ -29,16 +46,17 @@ class DecoratedCylinder:
         obj.addProperty("App::PropertyInteger", 
                         "Segments", 
                         "Visual",
-                        "Number of circle segments").Segments=5
+                        "Number of circle segments").Segments=0
         obj.addProperty("App::PropertyBool", 
-                        "Direction", 
+                        "Reversed", 
                         "Visual",
-                        "Direction of segments").Direction=True                                                                        
+                        "Direction of segments").Reversed=False                                                                        
         self.Type = 'decoratedCylinder'
         obj.Proxy = self
 
-    def onChanged(self, fp, prop):
-        FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
+    def onChanged(self, obj, prop):
+        pass
+        #FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
 
     def layerpoints(self,obj,layer,radius):
         angles = np.arange(obj.Segments+1)*pi*2/obj.Segments
@@ -58,18 +76,23 @@ class DecoratedCylinder:
                 nexti = (i+1) % obj.Segments
                 topi = (i+1) % obj.Segments
                 nextopi = (topi+1) % obj.Segments
+
+                c,n = l, l+1
+                if obj.Reversed:
+                    c,n = n,c
                 
-                print("Making line from [{0}] to [{1}]".format(i,nexti))
-                edge1 = Part.makeLine( (x[i],y[i],layers[l]), (x[nexti],y[nexti], layers[l]) )
-                edge2 = Part.makeLine( (x[nexti],y[nexti],layers[l]), (x[nextopi],y[nextopi], layers[l+1]) )
-                edge3 = Part.makeLine( (x[nextopi],y[nextopi],layers[l+1]), (x[i],y[i], layers[l]) )
+                #print("Making line from [{0}] to [{1}] at [{2}]".format(i,nexti,l))
+                #FreeCAD.Console.PrintMessage("Making line from [{0}] to [{1}] at [{2}]\n".format(i,nexti,l))
+                edge1 = Part.makeLine( (x[i],y[i],layers[c]), (x[nexti],y[nexti], layers[c]) )
+                edge2 = Part.makeLine( (x[nexti],y[nexti],layers[c]), (x[nextopi],y[nextopi], layers[n]) )
+                edge3 = Part.makeLine( (x[nextopi],y[nextopi],layers[n]), (x[i],y[i], layers[c]) )
                 wire = Part.Wire( [edge1, edge2, edge3 ])
                 face = Part.Face(wire)
                 facelist.append(face)
 
-                edge1 = Part.makeLine( (x[i],y[i],layers[l]), (x[nextopi],y[nextopi], layers[l+1]) )
-                edge2 = Part.makeLine( (x[nextopi],y[nextopi],layers[l+1]), (x[topi],y[topi], layers[l+1]) )
-                edge3 = Part.makeLine( (x[topi],y[topi],layers[l+1]), (x[i],y[i], layers[l]) )
+                edge1 = Part.makeLine( (x[i],y[i],layers[c]), (x[nextopi],y[nextopi], layers[n]) )
+                edge2 = Part.makeLine( (x[nextopi],y[nextopi],layers[n]), (x[topi],y[topi], layers[n]) )
+                edge3 = Part.makeLine( (x[topi],y[topi],layers[n]), (x[i],y[i], layers[c]) )
                 wire = Part.Wire( [edge1, edge2, edge3 ])
                 face = Part.Face(wire)
                 facelist.append(face)
@@ -78,10 +101,16 @@ class DecoratedCylinder:
 
 
     def execute(self, obj):
+        if obj.Segments < 1:
+            return
+
         FreeCAD.Console.PrintMessage("Recompute Python DecoratedCylinder feature\n")
+        FreeCAD.Console.PrintMessage("Current object: [{0}]\n".format(show(obj)))
 
-        facelist = self.cylinderfaces(obj, obj.Radius) + self.cylinderfaces(obj, obj.Radius - obj.Thickness)
-
+        outerfaces = self.cylinderfaces(obj, obj.Radius)
+        innerfaces = self.cylinderfaces(obj, obj.Radius - obj.Thickness)
+        facelist = innerfaces + outerfaces
+        
         outerx, outery = self.layerpoints(obj, 1, obj.Radius)
         innerx, innery = self.layerpoints(obj, 1, obj.Radius - obj.Thickness)
 
@@ -127,19 +156,19 @@ class ViewProviderDecoratedCylinder:
     def setDisplayMode(self, mode):
         return mode
 
-    def onChanged(self, vp, prop):
-        FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
+    def onChanged(self, obj, prop):
+        #FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
+        #FreeCAD.Console.PrintMessage("Current object: [{0}]\n".format(show(obj)))
         FreeCAD.ActiveDocument.recompute()
 
     def doubleClicked(self, obj):
         panel = DecoratedCylinderPanel(obj.Object)
         panel.form.radius.setValue(obj.Object.Radius)
         panel.form.thickness.setValue(obj.Object.Thickness)
-        print("Sett it")
         panel.form.cylheight.setValue(obj.Object.Height)
         panel.form.segments.setValue(obj.Object.Segments)
         panel.form.stripes.setValue(obj.Object.Stripes)
-        panel.form.reverse.setChecked(obj.Object.Direction)
+        panel.form.reverse.setChecked(obj.Object.Reversed)
         FreeCADGui.Control.showDialog(panel)
 
     def __getstate__(self):
@@ -154,26 +183,19 @@ class DecoratedCylinderPanel:
         self.dc = dc
 
     def accept(self):
-        print("Accepting")
-
-        for i in dir(self.form):
-            print("{0} -> [{1}".format(i,getattr(self.form,i)))
-
         radius = self.form.radius.value()
         thickness = self.form.thickness.value()
         height = self.form.cylheight.value()
         segments = self.form.segments.value()
         stripes = self.form.stripes.value()
-        direction = self.form.reverse.isChecked()
-        print("Radius = [{0}]".format(radius))
+        reverse = self.form.reverse.isChecked()
         if not self.dc:
             self.dc = createDecoratedCylinder()
-        print("Setting to: {0}".format(self.dc))
         self.dc.Radius = radius
         self.dc.Thickness = thickness
         self.dc.Height = height
         self.dc.Segments = segments
-        self.dc.Direction = direction
+        self.dc.Reversed = reverse
         self.dc.Stripes = stripes
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.Control.closeDialog()
