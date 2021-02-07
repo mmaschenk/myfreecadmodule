@@ -332,7 +332,6 @@ class ViewProviderPlatonicSolid:
         return mode
 
     def onChanged(self, vp, prop):
-        FreeCAD.Console.PrintMessage("Change property: " + str(prop) + "\n")
         FreeCAD.ActiveDocument.recompute()
 
     def doubleClicked(self, obj):

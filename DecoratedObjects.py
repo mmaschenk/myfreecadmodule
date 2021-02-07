@@ -105,7 +105,7 @@ class DecoratedCylinder:
             return
 
         FreeCAD.Console.PrintMessage("Recompute Python DecoratedCylinder feature\n")
-        FreeCAD.Console.PrintMessage("Current object: [{0}]\n".format(show(obj)))
+        #FreeCAD.Console.PrintMessage("Current object: [{0}]\n".format(show(obj)))
 
         outerfaces = self.cylinderfaces(obj, obj.Radius)
         innerfaces = self.cylinderfaces(obj, obj.Radius - obj.Thickness)

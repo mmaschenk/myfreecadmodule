@@ -26,6 +26,9 @@
      <property name="suffix">
       <string>mm</string>
      </property>
+     <property name="maximum">
+      <double>9999999.000000000000000</double>
+     </property>
      <property name="value">
       <double>10.000000000000000</double>
      </property>
@@ -96,6 +99,9 @@
     <widget class="QDoubleSpinBox" name="edgeradius">
      <property name="suffix">
       <string>mm</string>
+     </property>
+     <property name="maximum">
+      <double>99999999.000000000000000</double>
      </property>
      <property name="value">
       <double>2.000000000000000</double>
