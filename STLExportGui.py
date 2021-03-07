@@ -22,7 +22,7 @@ def exportStl():
         return
 
     _dir, _name = os.path.split(toExport.Document.FileName)
-    meshName = "{}-{}.stl".format(toExport.Document.Name, toExport.Name)
+    meshName = "{}-{}.stl".format(toExport.Document.Name, toExport.Label)
     meshName = os.path.join(_dir, meshName)
 
     shape = toExport.Shape
