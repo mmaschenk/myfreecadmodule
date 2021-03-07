@@ -34,6 +34,10 @@ class MyWorkbench ( Workbench ):
         self.appendToolbar(*DecoratedObjectsGui.toolbar)
         self.appendMenu(*DecoratedObjectsGui.toolbar)
 
+        import STLExportGui
+        self.appendToolbar(*STLExportGui.toolbar)
+        self.appendMenu(*STLExportGui.toolbar)
+
         Log ("Loading My Workbench... done\n")
 
     def Activated(self):
